@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="6dp"
+    android:layout_centerVertical="true">
+
+    <TextView
+        android:id="@+id/user_adapter_text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:text="User Name" />
+
+    <TextView
+        android:id="@+id/user_adapter_text_company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/evenDarkerGray"
+        android:singleLine="true"
+        android:textStyle="normal"
+        android:text="Company"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_below="@+id/user_adapter_text_name"
+         />
+
+    <TextView
+        android:id="@+id/user_adapter_text_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/evenDarkerGray"
+        android:singleLine="true"
+        android:textStyle="normal"
+        android:text="City"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/user_adapter_text_name"
+         />
+
+</RelativeLayout>
