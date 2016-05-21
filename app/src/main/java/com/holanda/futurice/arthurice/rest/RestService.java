@@ -26,7 +26,7 @@ public interface RestService {
     @GET("users/{id}")
     Call<User> user(@Path("id") int userId);
 
-    @GET("posts?userId={id}")
+    @GET("users/{id}/posts")
     Call<List<Post>> postsFromUser(@Path("id") int userId);
 
     @GET("users/{id}/albums")
@@ -35,7 +35,7 @@ public interface RestService {
     @GET("todos?userId={id}")
     Call<List<ToDo>> toDosFromUser(@Path("id") int userId);
 
-    @GET("comments?postId={id}")
+    @GET("posts/{id}/comments")
     Call<List<Comment>> commentsFromPost(@Path("id") int postId);
 
     @GET("albums/{id}/photos")

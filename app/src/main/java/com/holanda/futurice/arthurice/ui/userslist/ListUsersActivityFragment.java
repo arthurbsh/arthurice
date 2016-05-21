@@ -72,6 +72,7 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 List<User> users = response.body();
                 hideLoadingView();
+
                 mUsersListAdapter = new UsersListAdapter(getActivity(), users);
 
                 if(mUsersListView != null) {

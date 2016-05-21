@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +25,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.holanda.futurice.arthurice.R;
 import com.holanda.futurice.arthurice.model.Album;
+import com.holanda.futurice.arthurice.model.Comment;
 import com.holanda.futurice.arthurice.model.Coordinates;
 import com.holanda.futurice.arthurice.model.Photo;
+import com.holanda.futurice.arthurice.model.Post;
 import com.holanda.futurice.arthurice.model.User;
 import com.holanda.futurice.arthurice.rest.RestService;
 
@@ -46,6 +49,8 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private View mRootView;
 
     private User mUser;
+
+    private List<Post> mPosts;
 
     private int mUserId = -1;
 
@@ -82,6 +87,12 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private Retrofit mRetrofit;
 
     private RestService mRestService;
+
+    private ExpandableListView mPostsExpandableListView;
+
+    private PostsExpandableListAdapter mExpandablePostAdapter;
+
+
 
     public UserDetailsActivityFragment() {
     }
@@ -228,14 +239,66 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             ImageView imageView = (ImageView) imageGrid.getChildAt(i);
             String thumbnailUrl = photos.get(i).getThumbnailUrl();
 
-            Log.i("ALBUM", String.format("Loading %s into album %d", thumbnailUrl, photos.get(i).getAlbumId()));
-
             Glide.with(this).load(thumbnailUrl).override(50, 50).into(imageView);
         }
     }
 
     private void requestUserPosts() {
-        //unused for now
+        mRestService.postsFromUser(mUser.getId()).enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                mPosts = response.body();
+                onPostsReceived(mPosts);
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void onPostsReceived(List<Post> posts) {
+        Log.i("POSTS", String.format("%d posts were received from user " + mUser.getName(), posts.size()));
+
+        mExpandablePostAdapter = new PostsExpandableListAdapter(posts, getContext());
+
+        mPostsExpandableListView.setAdapter(mExpandablePostAdapter);
+
+        for (int i = 0; i < posts.size(); i++) {
+            requestCommentsFromPost(posts.get(i));
+        }
+    }
+
+    private void requestCommentsFromPost(final Post post) {
+
+        mRestService.commentsFromPost(post.getId()).enqueue(new Callback<List<Comment>>() {
+            @Override
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                post.setComments(response.body());
+                if (finishedGettingComments()) {
+                    mPostsExpandableListView.setVisibility(View.VISIBLE);
+                    //mPostsExpandableListView.setMinimumHeight(3000);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private boolean finishedGettingComments() {
+
+        for (int i = 0; i < mPosts.size(); i++) {
+            if (mPosts.get(i).getComments() == null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void initializeComponents() {
@@ -266,6 +329,10 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         //horizontal list of albums
         mAlbumsHorizontalList = (LinearLayout) mRootView.findViewById(R.id.albumsList);
+
+        //posts layout
+        mPostsExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListViewPosts);
+        mPostsExpandableListView.setVisibility(View.GONE);
 
         mCommunicationLayout = (LinearLayout) mRootView.findViewById(R.id.layout_communication);
         mCommunicationLayout.setVisibility(View.GONE);
