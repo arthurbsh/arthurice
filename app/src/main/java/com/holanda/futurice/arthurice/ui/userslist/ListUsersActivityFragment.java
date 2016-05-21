@@ -1,10 +1,16 @@
 package com.holanda.futurice.arthurice.ui.userslist;
 
 import android.content.Intent;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListUsersActivityFragment extends Fragment implements OnItemClickListener {
+public class ListUsersActivityFragment extends Fragment implements OnItemClickListener, SearchView.OnQueryTextListener {
 
 
     private ListView mUsersListView;
@@ -40,7 +46,10 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
 
     private View mRootView;
 
+    //private SearchView mSearchView;
+
     public ListUsersActivityFragment() {
+        setHasOptionsMenu(true);//makes the fragment on options menu be called
     }
 
     @Override
@@ -49,14 +58,24 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
 
         mRootView = inflater.inflate(R.layout.fragment_list_users, container, false);;
 
-
-
         initializeComponents();
         requestUsers();
 
+//        onCreateOptionsMenu();
+//
 
 
         return mRootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(this);
     }
 
     private void requestUsers() {
@@ -111,5 +130,15 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
         startActivity(i);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.i("SEARCH", "UPDATE displayed items");
+        return false;
+    }
 }
 

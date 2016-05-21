@@ -88,7 +88,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     private RestService mRestService;
 
-    private ExpandableListView mPostsExpandableListView;
+    private LinearLayout mPostsLinearLayout;
 
     private PostsExpandableListAdapter mExpandablePostAdapter;
 
@@ -263,11 +263,13 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         mExpandablePostAdapter = new PostsExpandableListAdapter(posts, getContext());
 
-        mPostsExpandableListView.setAdapter(mExpandablePostAdapter);
-
         for (int i = 0; i < posts.size(); i++) {
             requestCommentsFromPost(posts.get(i));
         }
+    }
+
+    private void addPostsToLayout() {
+
     }
 
     private void requestCommentsFromPost(final Post post) {
@@ -277,8 +279,13 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
                 post.setComments(response.body());
                 if (finishedGettingComments()) {
-                    mPostsExpandableListView.setVisibility(View.VISIBLE);
-                    //mPostsExpandableListView.setMinimumHeight(3000);
+                    addPostsToLayout();
+
+                    for (int i = 0; i < mPosts.size(); i++) {
+                        View postView = createPostView(mPosts.get(i));
+
+                        mPostsLinearLayout.addView(postView);
+                    }
 
                 }
             }
@@ -288,6 +295,31 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
             }
         });
+    }
+
+    private View createPostView(Post post) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View postView = inflater.inflate(R.layout.item_adapter_post, null);
+
+        TextView title = (TextView) postView.findViewById(R.id.textViewPostTitle);
+        TextView body = (TextView) postView.findViewById(R.id.textViewPostBody);
+        TextView commentsCount = (TextView) postView.findViewById(R.id.textViewCommentsCount);
+
+        title.setText(post.getTitle());
+        body.setText(post.getBody());
+        commentsCount.setText(fancyCommentCount(post.commentsCount()));
+
+        return postView;
+    }
+
+    private String fancyCommentCount(int commentCount) {
+        String comment = String.format("%d comment", commentCount);
+
+        if (commentCount > 1) {
+            comment = comment + "s";
+        }
+
+        return comment;
     }
 
     private boolean finishedGettingComments() {
@@ -331,8 +363,8 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         mAlbumsHorizontalList = (LinearLayout) mRootView.findViewById(R.id.albumsList);
 
         //posts layout
-        mPostsExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListViewPosts);
-        mPostsExpandableListView.setVisibility(View.GONE);
+        mPostsLinearLayout = (LinearLayout) mRootView.findViewById(R.id.linearLayoutPosts);
+        //mPostsExpandableListView.setVisibility(View.GONE);
 
         mCommunicationLayout = (LinearLayout) mRootView.findViewById(R.id.layout_communication);
         mCommunicationLayout.setVisibility(View.GONE);
