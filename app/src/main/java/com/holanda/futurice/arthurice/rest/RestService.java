@@ -32,7 +32,7 @@ public interface RestService {
     @GET("users/{id}/albums")
     Call<List<Album>> albumsFromUser(@Path("id") int userId);
 
-    @GET("todos?userId={id}")
+    @GET("user/{id}/todos")
     Call<List<ToDo>> toDosFromUser(@Path("id") int userId);
 
     @GET("posts/{id}/comments")
