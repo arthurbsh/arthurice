@@ -6,7 +6,7 @@ import com.holanda.futurice.arthurice.domain.model.User;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -17,26 +17,30 @@ public class SearchByStringSpecificationTest {
     @Test
     public void testBasics() {
         User user1 = basicUser("Simple User", "Ice of the future", "Coldtown");
-        User user2 = basicUser("Taipo User", "Fire of the past", "Hot town");
+        User user2 = basicUser("Taipo Usre", "Fire of the past", "Hot town");
 
-        SearchByStringSpecification spec1 = new SearchByStringSpecification("first");
+        SearchByStringSpecification spec1 = new SearchByStringSpecification("User");
+        SearchByStringSpecification spec2 = new SearchByStringSpecification("Ice");
+        SearchByStringSpecification spec3 = new SearchByStringSpecification("Cold");
+
+        assertTrue(spec1.isSatisfiedBy(user1));
+        assertTrue(spec2.isSatisfiedBy(user1));
+        assertTrue(spec3.isSatisfiedBy(user1));
+
+        assertFalse(spec1.isSatisfiedBy(user2));
+        assertFalse(spec2.isSatisfiedBy(user2));
+        assertFalse(spec3.isSatisfiedBy(user2));
     }
 
     @Test
     public void testIgnoreCase() {
-        User user1 = basicUser("First User", "Best Company", "not a capital");
-        User user2 = basicUser("Second User", "Best Company", "CAPITAL");
-        User user3 = basicUser("Third User", "Best Company", "Xmall");
-        User user4 = basicUser("fourth User", "Best Company", "Xmaller");
+        User user1 = basicUser("CAPSLOCK", "Ice of the future", "capital");
 
-        SearchByStringSpecification spec1 = new SearchByStringSpecification("first");
-        SearchByStringSpecification spec2 = new SearchByStringSpecification("user");
-        SearchByStringSpecification spec3 = new SearchByStringSpecification("capital");
-        SearchByStringSpecification spec4 = new SearchByStringSpecification("shallnotpass");
-        SearchByStringSpecification spec5 = new SearchByStringSpecification("best");
+        SearchByStringSpecification spec1 = new SearchByStringSpecification("capslock");
+        SearchByStringSpecification spec2 = new SearchByStringSpecification("CAPITAL");
 
         assertTrue(spec1.isSatisfiedBy(user1));
-        assertTrue(spec3.isSatisfiedBy(user2));
+        assertTrue(spec2.isSatisfiedBy(user1));
     }
 
     private User basicUser(String name, String company, String city) {
