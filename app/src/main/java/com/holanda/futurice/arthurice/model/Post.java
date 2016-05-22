@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Post {
+public class Post implements Comparable{
 
     @SerializedName("userId")
     private int mUserId;
@@ -85,5 +85,15 @@ public class Post {
 
         return mComments.size();
 
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        if (Post.class.isInstance(another)) {
+            Post anotherPost = (Post) another;
+            return getId() - anotherPost.getId();
+        }
+
+        return 0;
     }
 }

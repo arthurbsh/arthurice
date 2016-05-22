@@ -1,7 +1,6 @@
 package com.holanda.futurice.arthurice.ui.userslist;
 
 import android.content.Intent;
-import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -56,7 +55,7 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mRootView = inflater.inflate(R.layout.fragment_list_users, container, false);;
+        mRootView = inflater.inflate(R.layout.fragment_list_users, container, false);
 
         initializeComponents();
         requestUsers();

@@ -16,7 +16,9 @@
         android:nestedScrollingEnabled="true"
 
 
-        android:id="@+id/scrollView">
+        android:id="@+id/scrollView"
+        android:layout_above="@+id/layout_communication"
+        android:layout_alignParentTop="true">
 
 
         <RelativeLayout

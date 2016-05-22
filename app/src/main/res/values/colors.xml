@@ -7,5 +7,6 @@
     <color name="lightGray">#dddddd</color>
     <color name="lightGreen">#14339f48</color>
     <color name="blueLink">#0077cc</color>
+    <color name="blur">#d7111111</color>
 
 </resources>

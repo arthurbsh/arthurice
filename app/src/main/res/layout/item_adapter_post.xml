@@ -3,6 +3,7 @@
     android:layout_margin="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/relativeLayoutPost"
     android:padding="12dp">
 
     <TextView
@@ -20,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="This is an example of what a neat post should look like. Salmiakki, kappa, ebin, lots and lots of words here and so one. wtf... ok post is long enough maybe. No it is not, i should have added some more text, the hell cant event what i am typing anymore"
         android:id="@+id/textViewPostBody"
+        android:text="1\n2\n3\n4 lined text"
         android:layout_below="@+id/textViewPostTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -35,4 +36,24 @@
         android:layout_below="@+id/textViewPostBody"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/textViewCommentsCount"
+        android:background="@color/evenDarkerGray"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarPost"
+        android:layout_below="@id/textViewCommentBody"
+        android:progressDrawable="@color/colorPrimary"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

@@ -7,13 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ import com.holanda.futurice.arthurice.model.Post;
 import com.holanda.futurice.arthurice.model.User;
 import com.holanda.futurice.arthurice.rest.RestService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,10 +92,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     private LinearLayout mPostsLinearLayout;
 
-    private PostsExpandableListAdapter mExpandablePostAdapter;
-
-
-
     public UserDetailsActivityFragment() {
     }
 
@@ -144,8 +142,8 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         //request more stuff
         requestUserAlbums();
-        requestUserToDos();
         requestUserPosts();
+        requestUserToDos();
     }
 
     private void fillUserInfoViews(User user) {
@@ -195,11 +193,17 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private void onAlbumsReceived(List<Album> albums) {
         Log.i("ALBUMS", String.format("%d albums were received from user " + mUser.getName(), albums.size()));
 
-        for (int i = 0; i < albums.size(); i++) {
-            View miniAlbum = createMiniFromAlbum(albums.get(i));
-
-            mAlbumsHorizontalList.addView(miniAlbum);
+        try{
+            for (int i = 0; i < albums.size(); i++) {
+                View miniAlbum = createMiniFromAlbum(albums.get(i));
+                mAlbumsHorizontalList.addView(miniAlbum);
+            }
+        } catch (Exception e) {
+            //view probably does not exist anymore
+            e.printStackTrace();
         }
+
+
 
     }
 
@@ -231,16 +235,21 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     }
 
     private void fillPhotosInto(List<Photo> photos, View miniAlbum) {
-        RelativeLayout imageGrid = (RelativeLayout) miniAlbum.findViewById(R.id.mini_album_grid);
+        try{
+            RelativeLayout imageGrid = (RelativeLayout) miniAlbum.findViewById(R.id.mini_album_grid);
 
-        int imagesToLoad = Math.min(photos.size(), imageGrid.getChildCount());
+            int imagesToLoad = Math.min(photos.size(), imageGrid.getChildCount());
 
-        for (int i = 0; i < imagesToLoad; i++) {
-            ImageView imageView = (ImageView) imageGrid.getChildAt(i);
-            String thumbnailUrl = photos.get(i).getThumbnailUrl();
-
-            Glide.with(this).load(thumbnailUrl).override(50, 50).into(imageView);
+            for (int i = 0; i < imagesToLoad; i++) {
+                ImageView imageView = (ImageView) imageGrid.getChildAt(i);
+                String thumbnailUrl = photos.get(i).getThumbnailUrl();
+                Glide.with(this).load(thumbnailUrl).override(50, 50).into(imageView);
+            }
+        } catch (Exception e) {
+            //views probably does not exist anymore
+            e.printStackTrace();
         }
+
     }
 
     private void requestUserPosts() {
@@ -259,35 +268,47 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     }
 
     private void onPostsReceived(List<Post> posts) {
+
         Log.i("POSTS", String.format("%d posts were received from user " + mUser.getName(), posts.size()));
-
-        mExpandablePostAdapter = new PostsExpandableListAdapter(posts, getContext());
-
-        for (int i = 0; i < posts.size(); i++) {
-            requestCommentsFromPost(posts.get(i));
-        }
+        addPostsToLayout();
     }
 
     private void addPostsToLayout() {
 
+        try {
+            //makes the newer (highest id posts) come first
+            Collections.sort(mPosts);
+            Collections.reverse(mPosts);
+
+            for (int i = 0; i < mPosts.size(); i++) {
+                Post post = mPosts.get(i);
+
+                View postView = createPostView(post);
+
+                mPostsLinearLayout.addView(postView);
+
+                requestCommentsFromPost(post, postView);
+            }
+        } catch (Exception e){
+            //view probably does not exist anymore
+            e.printStackTrace();
+        }
+
     }
 
-    private void requestCommentsFromPost(final Post post) {
+    private void requestCommentsFromPost(final Post post, final View postView) {
 
         mRestService.commentsFromPost(post.getId()).enqueue(new Callback<List<Comment>>() {
             @Override
             public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                post.setComments(response.body());
-                if (finishedGettingComments()) {
-                    addPostsToLayout();
-
-                    for (int i = 0; i < mPosts.size(); i++) {
-                        View postView = createPostView(mPosts.get(i));
-
-                        mPostsLinearLayout.addView(postView);
-                    }
-
+                try {
+                    post.setComments(response.body());
+                    addComments(post, postView);
+                } catch (Exception e) {
+                    //probably view does not exist anymore
+                    e.printStackTrace();
                 }
+
             }
 
             @Override
@@ -303,13 +324,36 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         TextView title = (TextView) postView.findViewById(R.id.textViewPostTitle);
         TextView body = (TextView) postView.findViewById(R.id.textViewPostBody);
-        TextView commentsCount = (TextView) postView.findViewById(R.id.textViewCommentsCount);
+        TextView comments = (TextView) postView.findViewById(R.id.textViewCommentsCount);
 
         title.setText(post.getTitle());
+
+        body.setVisibility(View.INVISIBLE);
+        comments.setVisibility(View.INVISIBLE);
+
+        postView.setId(R.id.relativeLayoutPost);
+        postView.setTag(post);
+
+
+        return postView;
+    }
+
+    private void addComments(Post post, View postView){
+        TextView body = (TextView) postView.findViewById(R.id.textViewPostBody);
+        TextView commentsCount = (TextView) postView.findViewById(R.id.textViewCommentsCount);
+
+
         body.setText(post.getBody());
         commentsCount.setText(fancyCommentCount(post.commentsCount()));
 
-        return postView;
+
+        ProgressBar loading = (ProgressBar)postView.findViewById(R.id.progressBarPost);
+        body.setVisibility(View.VISIBLE);
+        commentsCount.setVisibility(View.VISIBLE);
+
+        loading.setVisibility(View.GONE);
+
+        postView.setOnClickListener(this);
     }
 
     private String fancyCommentCount(int commentCount) {
@@ -393,9 +437,29 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             onMapButtonClicked();
         } else if (clickedView.getId() == mWebsiteTextView.getId()) {
             onWebsiteClicked();
+        } else if (clickedView.getId() == R.id.relativeLayoutPost) {
+            onPostClicked(clickedView);
         } else {
             //click event not handled
         }
+    }
+
+    private void onPostClicked(View clickedView) {
+        Post clickedPost = (Post) clickedView.getTag();
+
+        openFragmentCommentsFor(clickedPost);
+    }
+
+    private void openFragmentCommentsFor(Post post) {
+
+        ShowCommentsFragment commentsFragment = new ShowCommentsFragment();
+        commentsFragment.setPost(post);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.fragment, commentsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void onWebsiteClicked() {

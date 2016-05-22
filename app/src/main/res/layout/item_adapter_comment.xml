@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="This is an example of what a neat post should look like. Salmiakki, kappa, ebin, lots and lots of words here and so one. wtf... ok post is long enough maybe. No it is not, i should have added some more text, the hell cant event what i am typing anymore"
         android:id="@+id/textViewCommentBody"
         android:layout_below="@id/textViewCommenter"
         android:layout_alignParentLeft="true"
