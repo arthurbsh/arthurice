@@ -8,9 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.holanda.futurice.arthurice.R;
-import com.holanda.futurice.arthurice.model.Comment;
-import com.holanda.futurice.arthurice.model.Post;
-import com.holanda.futurice.arthurice.model.User;
+import com.holanda.futurice.arthurice.domain.model.Comment;
+import com.holanda.futurice.arthurice.domain.model.Post;
 
 /**
  * Created by Holanda on 5/21/2016.

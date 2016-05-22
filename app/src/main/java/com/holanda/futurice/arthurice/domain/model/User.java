@@ -1,11 +1,11 @@
-package com.holanda.futurice.arthurice.model;
+package com.holanda.futurice.arthurice.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Holanda on 5/18/2016.
  */
-public class User implements Comparable{
+public class User implements Comparable, Entity{
 
     @SerializedName("id")
     private int mId;

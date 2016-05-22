@@ -8,9 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.holanda.futurice.arthurice.R;
-import com.holanda.futurice.arthurice.model.User;
-
-import org.w3c.dom.Text;
+import com.holanda.futurice.arthurice.domain.model.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +25,12 @@ public class UsersListAdapter extends BaseAdapter{
 
     public UsersListAdapter(final Context context, final List<User> users) {
         mInflater = LayoutInflater.from(context);
-        Collections.sort(users);
-        mListUsers = users;
+        setSource(users);
+    }
+
+    public void setSource(List<User> newSource) {
+        Collections.sort(newSource);
+        mListUsers = newSource;
     }
 
     @Override

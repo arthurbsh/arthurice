@@ -1,4 +1,4 @@
-package com.holanda.futurice.arthurice.model;
+package com.holanda.futurice.arthurice.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 

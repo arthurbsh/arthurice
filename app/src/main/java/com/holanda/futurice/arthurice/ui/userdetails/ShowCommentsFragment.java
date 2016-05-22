@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.holanda.futurice.arthurice.R;
-import com.holanda.futurice.arthurice.model.Post;
+import com.holanda.futurice.arthurice.domain.model.Post;
 
 /**
  * A simple {@link Fragment} subclass.

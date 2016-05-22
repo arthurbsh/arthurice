@@ -19,7 +19,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.holanda.futurice.arthurice.R;
-import com.holanda.futurice.arthurice.model.User;
+import com.holanda.futurice.arthurice.domain.model.User;
+import com.holanda.futurice.arthurice.domain.repositories.SearchByStringSpecification;
+import com.holanda.futurice.arthurice.domain.repositories.UsersRepository;
 import com.holanda.futurice.arthurice.rest.RestService;
 import com.holanda.futurice.arthurice.ui.userdetails.UserDetailsActivity;
 
@@ -39,11 +41,13 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
 
     private ListView mUsersListView;
 
-    private ListAdapter mUsersListAdapter;
+    private UsersListAdapter mUsersListAdapter;
 
     private ProgressBar mLoadingView;
 
     private View mRootView;
+
+    private UsersRepository mUsersRepository;
 
     //private SearchView mSearchView;
 
@@ -57,12 +61,10 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
 
         mRootView = inflater.inflate(R.layout.fragment_list_users, container, false);
 
+        mUsersRepository = new UsersRepository();
+
         initializeComponents();
         requestUsers();
-
-//        onCreateOptionsMenu();
-//
-
 
         return mRootView;
     }
@@ -88,15 +90,7 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
         rest.users().enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                List<User> users = response.body();
-                hideLoadingView();
-
-                mUsersListAdapter = new UsersListAdapter(getActivity(), users);
-
-                if(mUsersListView != null) {
-                    Log.i("LISTUSERS", String.format("Setting adapter with %d users", users.size()));
-                    mUsersListView.setAdapter(mUsersListAdapter);
-                }
+                onUsersReceived(response.body());
             }
 
             @Override
@@ -104,6 +98,26 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
                 Log.i("RETRO", "falha");
             }
         });
+    }
+
+    private void onUsersReceived(List<User> users) {
+
+        fillRepository(users);
+        hideLoadingView();
+
+
+        mUsersListAdapter = new UsersListAdapter(getActivity(), mUsersRepository.all());
+
+        if(mUsersListView != null) {
+            Log.i("LISTUSERS", String.format("Setting adapter with %d users", users.size()));
+            mUsersListView.setAdapter(mUsersListAdapter);
+        }
+    }
+
+    private void fillRepository(List<User> users) {
+        for (int i = 0; i < users.size(); i++) {
+            mUsersRepository.including(users.get(i));
+        }
     }
 
     private void hideLoadingView() {
@@ -137,6 +151,16 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.i("SEARCH", "UPDATE displayed items");
+        SearchByStringSpecification searchSpecification = new SearchByStringSpecification(newText);
+
+        List<User> matchingUsers = mUsersRepository.matching(searchSpecification);
+
+        if(mUsersListAdapter != null) {
+            mUsersListAdapter.setSource(matchingUsers);
+            mUsersListView.setAdapter(mUsersListAdapter);
+        }
+
+
         return false;
     }
 }

@@ -25,12 +25,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.holanda.futurice.arthurice.R;
-import com.holanda.futurice.arthurice.model.Album;
-import com.holanda.futurice.arthurice.model.Comment;
-import com.holanda.futurice.arthurice.model.Coordinates;
-import com.holanda.futurice.arthurice.model.Photo;
-import com.holanda.futurice.arthurice.model.Post;
-import com.holanda.futurice.arthurice.model.User;
+import com.holanda.futurice.arthurice.domain.model.Album;
+import com.holanda.futurice.arthurice.domain.model.Comment;
+import com.holanda.futurice.arthurice.domain.model.Coordinates;
+import com.holanda.futurice.arthurice.domain.model.Photo;
+import com.holanda.futurice.arthurice.domain.model.Post;
+import com.holanda.futurice.arthurice.domain.model.User;
 import com.holanda.futurice.arthurice.rest.RestService;
 
 import java.util.Collections;
