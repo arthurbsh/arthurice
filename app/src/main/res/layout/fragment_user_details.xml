@@ -21,9 +21,10 @@
         android:layout_alignParentTop="true">
 
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="4dp">
 
             <RelativeLayout
@@ -64,14 +65,12 @@
                 android:id="@+id/spaceAddress"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/basicInfoLayout"
                 android:layout_margin="8dp"
                 android:background="@color/evenDarkerGray"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spaceAddress"
                 android:id="@+id/addressLayout"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
@@ -140,13 +139,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="8dp"
-                android:layout_below="@id/addressLayout"
                 android:background="@color/evenDarkerGray"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/spaceAlbums"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:id="@+id/albumsLayout">
@@ -172,8 +169,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-
-
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -185,13 +180,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="8dp"
-                android:layout_below="@id/albumsLayout"
                 android:background="@color/evenDarkerGray"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spacePosts"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
@@ -215,7 +208,7 @@
             </RelativeLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 
