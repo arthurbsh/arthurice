@@ -6,6 +6,7 @@ import com.holanda.futurice.arthurice.domain.model.User;
 
 import org.junit.Test;
 
+import static com.holanda.futurice.arthurice.TestUtils.basicUser;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
@@ -16,8 +17,8 @@ public class SearchByStringSpecificationTest {
 
     @Test
     public void testBasics() {
-        User user1 = basicUser("Simple User", "Ice of the future", "Coldtown");
-        User user2 = basicUser("Taipo Usre", "Fire of the past", "Hot town");
+        User user1 = basicUser(1, "Simple User", "Ice of the future", "Coldtown");
+        User user2 = basicUser(2, "Taipo Usre", "Fire of the past", "Hot town");
 
         SearchByStringSpecification spec1 = new SearchByStringSpecification("User");
         SearchByStringSpecification spec2 = new SearchByStringSpecification("Ice");
@@ -34,7 +35,7 @@ public class SearchByStringSpecificationTest {
 
     @Test
     public void testIgnoreCase() {
-        User user1 = basicUser("CAPSLOCK", "Ice of the future", "capital");
+        User user1 = basicUser(1, "CAPSLOCK", "Ice of the future", "capital");
 
         SearchByStringSpecification spec1 = new SearchByStringSpecification("capslock");
         SearchByStringSpecification spec2 = new SearchByStringSpecification("CAPITAL");
@@ -42,13 +43,4 @@ public class SearchByStringSpecificationTest {
         assertTrue(spec1.isSatisfiedBy(user1));
         assertTrue(spec2.isSatisfiedBy(user1));
     }
-
-    private User basicUser(String name, String company, String city) {
-        Company c = new Company(company, "", "");
-        Address a = new Address("", "", city, "", null);
-        User u = new User(0, name, "", "", "", "", a, c);
-
-        return u;
-    }
-
 }
