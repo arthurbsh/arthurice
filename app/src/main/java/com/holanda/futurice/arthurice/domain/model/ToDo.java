@@ -2,6 +2,9 @@ package com.holanda.futurice.arthurice.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Represents a task that has been or not done by an User.
+ */
 public class ToDo {
 
     @SerializedName("userId")
@@ -16,13 +19,6 @@ public class ToDo {
     @SerializedName("completed")
     private boolean mCompleted;
 
-    /**
-     *
-     * @param id
-     * @param title
-     * @param userId
-     * @param completed
-     */
     public ToDo(int userId, int id, String title, boolean completed) {
         this.mUserId = userId;
         this.mId = id;
@@ -30,38 +26,18 @@ public class ToDo {
         this.mCompleted = completed;
     }
 
-    /**
-     *
-     * @return
-     * The mUserId
-     */
     public int getUserId() {
         return mUserId;
     }
 
-    /**
-     *
-     * @return
-     * The mId
-     */
     public int getId() {
         return mId;
     }
 
-    /**
-     *
-     * @return
-     * The mTitle
-     */
     public String getTitle() {
         return mTitle;
     }
 
-    /**
-     *
-     * @return
-     * The mCompleted
-     */
     public boolean isCompleted() {
         return mCompleted;
     }

@@ -2,6 +2,9 @@ package com.holanda.futurice.arthurice.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Represents an album of photos.
+ */
 public class Album {
 
     @SerializedName("UserId")
@@ -19,29 +22,14 @@ public class Album {
         this.mTitle = title;
     }
 
-    /**
-     *
-     * @return
-     * The mUserId
-     */
     public int getUserId() {
         return mUserId;
     }
 
-    /**
-     *
-     * @return
-     * The id
-     */
     public int getId() {
         return mId;
     }
 
-    /**
-     *
-     * @return
-     * The title
-     */
     public String getTitle() {
         return mTitle;
     }

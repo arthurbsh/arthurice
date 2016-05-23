@@ -11,9 +11,6 @@ import com.holanda.futurice.arthurice.R;
 import com.holanda.futurice.arthurice.domain.model.Comment;
 import com.holanda.futurice.arthurice.domain.model.Post;
 
-/**
- * Created by Holanda on 5/21/2016.
- */
 public class CommentsListAdapter extends BaseAdapter {
 
     private Post mPost;

@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * Represents a Post made by the User.
+ */
 public class Post implements Comparable{
 
     @SerializedName("userId")
@@ -20,13 +23,6 @@ public class Post implements Comparable{
 
     private List<Comment> mComments;
 
-    /**
-     *
-     * @param id
-     * @param body
-     * @param title
-     * @param userId
-     */
     public Post(int userId, int id, String title, String body) {
         this.mUserId = userId;
         this.mId = id;
@@ -34,38 +30,18 @@ public class Post implements Comparable{
         this.mBody = body;
     }
 
-    /**
-     *
-     * @return
-     * The mUserId
-     */
     public int getUserId() {
         return mUserId;
     }
 
-    /**
-     *
-     * @return
-     * The mId
-     */
     public int getId() {
         return mId;
     }
 
-    /**
-     *
-     * @return
-     * The mTitle
-     */
     public String getTitle() {
         return mTitle;
     }
 
-    /**
-     *
-     * @return
-     * The mBody
-     */
     public String getBody() {
         return mBody;
     }
@@ -84,7 +60,6 @@ public class Post implements Comparable{
         }
 
         return mComments.size();
-
     }
 
     @Override

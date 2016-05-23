@@ -14,7 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by Holanda on 5/18/2016.
+ * Abstraction of the RESTful webservice.
  */
 public interface RestService {
 

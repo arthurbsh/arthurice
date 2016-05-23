@@ -1,7 +1,5 @@
 package com.holanda.futurice.arthurice.domain.repositories;
 
-import com.holanda.futurice.arthurice.domain.model.Entity;
-
 import java.util.List;
 
 /**

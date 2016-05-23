@@ -3,7 +3,7 @@ package com.holanda.futurice.arthurice.domain.repositories;
 import com.holanda.futurice.arthurice.domain.model.User;
 
 /**
- * Created by holanda on 5/22/16.
+ * Specification to filter Users by a given string.
  */
 public class SearchByStringSpecification implements ISpecification<User> {
 
@@ -13,6 +13,11 @@ public class SearchByStringSpecification implements ISpecification<User> {
         mSearchString = searchString.toLowerCase();
     }
 
+    /**
+     * Returns if the given user has the given substring in one his name, company name or city.
+     * @param user The given user.
+     * @return true if the user's name, company o city contains the substring, false otherwise.
+     */
     @Override
     public boolean isSatisfiedBy(User user) {
 

@@ -22,8 +22,6 @@ public class ShowCommentsFragment extends Fragment implements View.OnClickListen
 
     private Post mPost;
 
-    private ListView mCommentsListView;
-
     private RelativeLayout mBackgroundLayout;
 
     public ShowCommentsFragment() {
@@ -47,9 +45,10 @@ public class ShowCommentsFragment extends Fragment implements View.OnClickListen
     }
 
     private void initializeComponents() {
-        mCommentsListView = (ListView) mRootView.findViewById(R.id.listViewComments);
+        ListView commentsListView = (ListView) mRootView.findViewById(R.id.listViewComments);
         CommentsListAdapter adapter = new CommentsListAdapter(mPost, getContext());
-        mCommentsListView.setAdapter(adapter);
+
+        commentsListView.setAdapter(adapter);
 
         mBackgroundLayout = (RelativeLayout) mRootView.findViewById(R.id.relativeLayoutComments);
         mBackgroundLayout.setOnClickListener(this);

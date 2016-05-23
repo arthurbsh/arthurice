@@ -49,8 +49,6 @@ public class ListUsersActivityFragment extends Fragment implements OnItemClickLi
 
     private UsersRepository mUsersRepository;
 
-    //private SearchView mSearchView;
-
     public ListUsersActivityFragment() {
         setHasOptionsMenu(true);//makes the fragment on options menu be called
     }

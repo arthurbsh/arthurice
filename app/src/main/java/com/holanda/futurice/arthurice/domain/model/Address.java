@@ -3,7 +3,7 @@ package com.holanda.futurice.arthurice.domain.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Holanda on 5/18/2016.
+ * Represents a residential Address of an User.
  */
 public class Address {
 

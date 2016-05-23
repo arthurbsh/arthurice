@@ -20,10 +20,11 @@ public class UserDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().get
-        int userId = getIntent().getExtras().getInt("userId");//make to resources or something
+
+        int userId = getIntent().getExtras().getInt(getString(R.string.intent_extras_user_id));
         Log.i("USERDETAILS", String.format("Displaying details for user %d", userId));
     }
 

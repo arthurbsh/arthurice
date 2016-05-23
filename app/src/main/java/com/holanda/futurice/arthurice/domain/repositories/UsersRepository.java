@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by holanda on 5/22/16.
+ * Repository for User.
  */
 public class UsersRepository implements IRepository<User > {
 

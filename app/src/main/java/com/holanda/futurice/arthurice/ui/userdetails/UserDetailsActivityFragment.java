@@ -143,7 +143,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         //request more stuff
         requestUserAlbums();
         requestUserPosts();
-        requestUserToDos();
     }
 
     private void fillUserInfoViews(User user) {
@@ -170,10 +169,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     private String formatPhone(String phone) {
         return phone;
-    }
-
-    private void requestUserToDos() {
-        //unused for now
     }
 
     private void requestUserAlbums() {
@@ -223,7 +218,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         mRestService.photosFromAlbum(albumId).enqueue(new Callback<List<Photo>>() {
             @Override
             public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-                fillPhotosInto(response.body(), miniAlbum);
+                fillPhotosIntoAlbum(response.body(), miniAlbum);
             }
 
             @Override
@@ -234,7 +229,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     }
 
-    private void fillPhotosInto(List<Photo> photos, View miniAlbum) {
+    private void fillPhotosIntoAlbum(List<Photo> photos, View miniAlbum) {
         try{
             RelativeLayout imageGrid = (RelativeLayout) miniAlbum.findViewById(R.id.mini_album_grid);
 
@@ -308,7 +303,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
                     //probably view does not exist anymore
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -366,17 +360,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         return comment;
     }
 
-    private boolean finishedGettingComments() {
-
-        for (int i = 0; i < mPosts.size(); i++) {
-            if (mPosts.get(i).getComments() == null) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private void initializeComponents() {
 
         //ProgressBars
@@ -408,8 +391,8 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         //posts layout
         mPostsLinearLayout = (LinearLayout) mRootView.findViewById(R.id.linearLayoutPosts);
-        //mPostsExpandableListView.setVisibility(View.GONE);
 
+        //layout with the communication buttons
         mCommunicationLayout = (LinearLayout) mRootView.findViewById(R.id.layout_communication);
         mCommunicationLayout.setVisibility(View.GONE);
 
@@ -477,9 +460,9 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     }
 
     private void onMapButtonClicked() {
-        Coordinates coord = mUser.getAddress().getGeoInfo();
+        Coordinates coordinates = mUser.getAddress().getGeoInfo();
 
-        startMapApplication(coord.getLatitude(), coord.getLongitude());
+        startMapApplication(coordinates.getLatitude(), coordinates.getLongitude());
     }
 
     private void startMapApplication(float latitude, float longitude) {
@@ -513,7 +496,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             intent.setData(Uri.parse("tel:" + phone));
             getContext().startActivity(intent);
         }
-
     }
 
     private void onSmsButtonClicked() {

@@ -69,7 +69,9 @@ public class ListUsersActivityFragmentTest {
         shadowListView.performItemClick(0);
 
         //tests if id was passed
-        assertEquals(user1.getId(), shadowActivity.peekNextStartedActivity().getExtras().getInt("userId"));
+        String key = usersActivity.getString(R.string.intent_extras_user_id);
+        int receivedId = shadowActivity.peekNextStartedActivity().getExtras().getInt(key);
+        assertEquals(user1.getId(), receivedId);
     }
 
 }
